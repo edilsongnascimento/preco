@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Consulta de Preços</title>
+    <meta name="theme-color" content="#1d4ed8" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -12,6 +16,10 @@
         <p class="eyebrow">Consulta rápida</p>
         <h1>Consulta de preços</h1>
         <p class="description">Pesquise pelo nome, código ou código de barras. Se preferir, leia o código com a câmera.</p>
+        <button id="instalar-app" class="install-button" type="button">Instalar no Chrome</button>
+        <p id="install-status" class="install-status" aria-live="polite">
+          No Chrome, use o menu ⋮ e selecione "Instalar app" ou "Adicionar à tela inicial".
+        </p>
       </header>
 
       <section class="search-panel" aria-label="Pesquisar produtos">

@@ -6,10 +6,63 @@ const fecharCameraButton = document.querySelector('#fechar-camera');
 const cameraPanel = document.querySelector('#camera-panel');
 const cameraPreview = document.querySelector('#camera-preview');
 const cameraStatus = document.querySelector('#camera-status');
+const instalarAppButton = document.querySelector('#instalar-app');
+const installStatus = document.querySelector('#install-status');
 
 let produtos = [];
 let scannerControls = null;
 let scannerAtivo = false;
+let installPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  installPrompt = event;
+  installStatus.textContent = 'Pronto para instalar. Toque em "Instalar no Chrome".';
+});
+
+window.addEventListener('appinstalled', () => {
+  installPrompt = null;
+  installStatus.textContent = 'Aplicativo instalado com sucesso.';
+});
+
+instalarAppButton.addEventListener('click', async () => {
+  if (!installPrompt) {
+    installStatus.textContent = 'No Chrome, abra o menu ⋮ e selecione "Instalar app" ou "Adicionar à tela inicial".';
+    return;
+  }
+
+  instalarAppButton.disabled = true;
+
+  try {
+    await installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    installPrompt = null;
+
+    if (outcome === 'accepted') {
+      installStatus.textContent = 'Instalação iniciada.';
+    } else {
+      installStatus.textContent = 'Instalação cancelada. Você pode instalar depois pelo menu do Chrome.';
+    }
+  } catch (error) {
+    installStatus.textContent = 'Não foi possível abrir a instalação. Use o menu ⋮ do Chrome para instalar.';
+    console.error('Erro ao solicitar a instalação do aplicativo:', error);
+  } finally {
+    instalarAppButton.disabled = false;
+  }
+});
+
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  installStatus.textContent = 'Aplicativo instalado.';
+}
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch((error) => {
+      installStatus.textContent = 'Para instalar, use o menu ⋮ do Chrome. O modo sem internet não está disponível agora.';
+      console.error('Erro ao registrar o service worker:', error);
+    });
+  });
+}
 
 const formatCurrency = (value) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
