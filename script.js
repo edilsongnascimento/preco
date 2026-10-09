@@ -1,8 +1,15 @@
 const buscaInput = document.querySelector('#busca');
 const produtosContainer = document.querySelector('#produtos');
 const statusElement = document.querySelector('#status');
+const abrirCameraButton = document.querySelector('#abrir-camera');
+const fecharCameraButton = document.querySelector('#fechar-camera');
+const cameraPanel = document.querySelector('#camera-panel');
+const cameraPreview = document.querySelector('#camera-preview');
+const cameraStatus = document.querySelector('#camera-status');
 
 let produtos = [];
+let scannerControls = null;
+let scannerAtivo = false;
 
 const formatCurrency = (value) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
@@ -61,6 +68,65 @@ buscaInput.addEventListener('input', () => {
 
   renderProducts(encontrados);
 });
+
+const fecharLeitor = () => {
+  scannerAtivo = false;
+  scannerControls?.stop();
+  scannerControls = null;
+  cameraPreview.srcObject = null;
+  cameraPanel.hidden = true;
+  abrirCameraButton.focus();
+};
+
+const abrirLeitor = async () => {
+  if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
+    cameraPanel.hidden = false;
+    cameraStatus.textContent = 'A câmera requer uma conexão segura (HTTPS) e um navegador compatível.';
+    return;
+  }
+
+  if (!window.ZXingBrowser?.BrowserMultiFormatReader) {
+    cameraPanel.hidden = false;
+    cameraStatus.textContent = 'Não foi possível carregar o leitor de código de barras. Atualize a página e tente novamente.';
+    return;
+  }
+
+  cameraPanel.hidden = false;
+  cameraStatus.textContent = 'Aponte a câmera traseira para o código de barras.';
+  scannerAtivo = true;
+  const reader = new ZXingBrowser.BrowserMultiFormatReader();
+
+  try {
+    const controls = await reader.decodeFromVideoDevice(undefined, cameraPreview, (result) => {
+      if (!result || !scannerAtivo) return;
+
+      const codigo = result.getText();
+      fecharLeitor();
+      buscaInput.value = codigo;
+      buscaInput.dispatchEvent(new Event('input', { bubbles: true }));
+      buscaInput.focus();
+    });
+
+    if (scannerAtivo) {
+      scannerControls = controls;
+    } else {
+      controls.stop();
+    }
+  } catch (error) {
+    if (!scannerAtivo) return;
+
+    scannerAtivo = false;
+    cameraStatus.textContent = error.name === 'NotAllowedError'
+      ? 'Permita o acesso à câmera nas configurações do navegador e tente novamente.'
+      : error.name === 'NotFoundError'
+        ? 'Nenhuma câmera foi encontrada neste dispositivo.'
+        : 'Não foi possível iniciar a câmera. Verifique a permissão e tente novamente.';
+    console.error('Erro ao iniciar a leitura pela câmera:', error);
+  }
+};
+
+abrirCameraButton.addEventListener('click', abrirLeitor);
+fecharCameraButton.addEventListener('click', fecharLeitor);
 
 const loadProducts = async () => {
   try {

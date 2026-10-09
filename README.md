@@ -2,6 +2,10 @@
 
 Aplicativo estático para consultar os produtos cadastrados em `produtos.json` por nome, código ou código de barras.
 
+## Leitura pela câmera
+
+Em celulares, toque em **Ler com a câmera** e permita o acesso quando o navegador solicitar. O leitor usa a câmera traseira e preenche automaticamente a busca quando reconhece um código. A leitura é feita no próprio dispositivo; as imagens da câmera não são enviadas ao servidor. A câmera exige HTTPS, disponível no GitHub Pages.
+
 ## Publicar no GitHub Pages
 
 1. Crie um repositório no GitHub e envie os arquivos deste projeto para a branch `main` ou `master`.

@@ -53,10 +53,16 @@ h1 {
   box-shadow: 0 10px 30px rgb(15 23 42 / 6%);
 }
 
-.search-panel label {
+.search-panel > label {
   display: block;
   margin-bottom: 8px;
   font-weight: 700;
+}
+
+.search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
 }
 
 .search-panel input {
@@ -74,11 +80,72 @@ h1 {
   box-shadow: 0 0 0 3px rgb(37 99 235 / 14%);
 }
 
+.camera-button,
+.close-camera-button {
+  min-height: 48px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 10px;
+  background: #1d4ed8;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.camera-button:hover,
+.close-camera-button:hover {
+  background: #1e40af;
+}
+
+.camera-button:focus-visible,
+.close-camera-button:focus-visible {
+  outline: 3px solid rgb(37 99 235 / 35%);
+  outline-offset: 2px;
+}
+
 .status {
   min-height: 1.25em;
   margin: 12px 0 0;
   color: #64748b;
   font-size: 0.9rem;
+}
+
+.camera-panel {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid #dce3ed;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.camera-panel[hidden] {
+  display: none;
+}
+
+.camera-preview {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  border-radius: 8px;
+  background: #172033;
+  object-fit: cover;
+}
+
+.camera-status {
+  margin: 12px 0;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.close-camera-button {
+  width: 100%;
+  background: #e2e8f0;
+  color: #172033;
+}
+
+.close-camera-button:hover {
+  background: #cbd5e1;
 }
 
 .results {
@@ -121,5 +188,13 @@ h1 {
   .search-panel,
   .product {
     padding: 18px;
+  }
+
+  .search-row {
+    grid-template-columns: 1fr;
+  }
+
+  .camera-button {
+    width: 100%;
   }
 }

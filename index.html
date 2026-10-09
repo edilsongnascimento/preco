@@ -11,24 +11,33 @@
       <header class="page-header">
         <p class="eyebrow">Consulta rápida</p>
         <h1>Consulta de preços</h1>
-        <p class="description">Pesquise um produto pelo nome, código ou código de barras.</p>
+        <p class="description">Pesquise pelo nome, código ou código de barras. Se preferir, leia o código com a câmera.</p>
       </header>
 
       <section class="search-panel" aria-label="Pesquisar produtos">
         <label for="busca">Produto</label>
-        <input
-          id="busca"
-          type="search"
-          placeholder="Digite ou escaneie um código de barras"
-          autocomplete="off"
-          autofocus
-        />
+        <div class="search-row">
+          <input
+            id="busca"
+            type="search"
+            placeholder="Digite um nome ou código"
+            autocomplete="off"
+            autofocus
+          />
+          <button id="abrir-camera" class="camera-button" type="button">Ler com a câmera</button>
+        </div>
         <p id="status" class="status" aria-live="polite">Carregando produtos...</p>
+        <section id="camera-panel" class="camera-panel" aria-label="Leitor de código de barras" hidden>
+          <video id="camera-preview" class="camera-preview" autoplay muted playsinline></video>
+          <p id="camera-status" class="camera-status" role="status" aria-live="polite"></p>
+          <button id="fechar-camera" class="close-camera-button" type="button">Fechar câmera</button>
+        </section>
       </section>
 
       <section id="produtos" class="results" aria-live="polite" aria-label="Resultados da pesquisa"></section>
     </main>
 
-    <script src="script.js"></script>
+    <script src="vendor/zxing-browser.min.js" defer></script>
+    <script src="script.js" defer></script>
   </body>
 </html>
