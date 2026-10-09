@@ -2,6 +2,8 @@
 
 Aplicativo estático para consultar os produtos cadastrados em `produtos.json` por nome, código ou código de barras.
 
+Na busca, consultas com 1 a 6 algarismos procuram somente o código do produto; consultas com 7 ou mais algarismos procuram somente o código de barras. Buscas por nome continuam pesquisando todos os campos.
+
 ## Instalar pelo Chrome
 
 Abra o site no Chrome e toque em **Instalar no Chrome**. Se o Chrome ainda não oferecer a instalação pelo botão, abra o menu **⋮** e escolha **Instalar app** ou **Adicionar à tela inicial**. Depois de abrir o app uma vez com internet, a interface e o catálogo ficam disponíveis para consulta offline.

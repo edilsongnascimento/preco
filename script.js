@@ -115,9 +115,19 @@ buscaInput.addEventListener('input', () => {
     return;
   }
 
-  const encontrados = produtos.filter((produto) =>
-    [produto.nome, produto.codigo, produto.barcode].some((campo) => normalize(campo).includes(search))
-  );
+  const buscaNumerica = /^\d+$/.test(search);
+  const encontrados = produtos.filter((produto) => {
+    if (buscaNumerica && search.length <= 6) {
+      return normalize(produto.codigo).includes(search);
+    }
+
+    if (buscaNumerica) {
+      return normalize(produto.barcode).includes(search);
+    }
+
+    return [produto.nome, produto.codigo, produto.barcode]
+      .some((campo) => normalize(campo).includes(search));
+  });
 
   renderProducts(encontrados);
 });
